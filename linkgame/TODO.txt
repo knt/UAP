@@ -1,0 +1,11 @@
+
+
+
+
+** TODO Suggest next step
+   This would suggest a possible new link, in case the user is stuck.
+   There is some method that finds these paths...look in CNet API.
+   
+
+** TODO Graphics
+   Using html canvas, probably

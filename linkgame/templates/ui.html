@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>                                                                
+<head>
+<title>LinkGame 0.1</title>
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>         
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+
+
+{% for relation in relationsList %}
+$("#relationsMenu").append("<option value='{{ relation }}'>" + '{{ relation }}' + "</option>");
+{% endfor %}
+
+
+});
+                           
+</script>
+
+  <script type="text/javascript">
+  function draw(){
+  var canvas = document.getElementById("canvas");  
+  if (canvas.getContext){  
+  var ctx = canvas.getContext("2d");  
+  ctx.fillText('{{ concept1 }}', 60, 60);
+   ctx.beginPath();  
+ ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle  
+ ctx.stroke();   
+
+  } else {  
+  // canvas-unsupported code here  
+  }  }                        
+  </script>
+</head>                                                                 
+
+<body onload="draw()">                                                                  
+
+<div id="visuals" class="visual">
+  <canvas id="canvas" width="150" height="150">Visualize your path in the game.</canvas>
+</div>
+
+
+<div>Try to find a connection between {{ concept1 }} and {{ concept2 }}.</div>
+
+
+<div class="form">
+  <form name="relationForm" action="" method="" id="relationForm">
+  <input type="text" name="concept1" required="true"/>
+  <select name="relation" id="relationsMenu" list="relationsList" required="true">
+  </select>
+  <input type="text" name="concept2" required="true" />
+  <button action="" method="" name="submitButton" id="submitButton" type="submit">Submit</button>
+  </form>
+</div>
+
+<button action="" method="" name="getConceptsButton"
+id="getConceptsButton" type="submit">Get New Concepts</button>
+
+
+
+
+  
+</body>                                                                 
+</html>
