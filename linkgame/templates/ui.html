@@ -3,61 +3,120 @@
 <html>                                                                
 <head>
 <title>LinkGame 0.1</title>
+<!-- <link rel="stylesheet" href="/media/style.css"> -->
 <script type="text/javascript"
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>         
 <script type="text/javascript">
 
+
+
+
 $(document).ready(function(){
 
-
+var startConcept = '{{ concept1 }}';
+var endConcept = '{{ concept2 }}';
 
 {% for relation in relationsList %}
 $("#relationsMenu").append("<option value='{{ relation }}'>" + '{{ relation }}' + "</option>");
 {% endfor %}
 
 
+  
+$("#linkButton").click(function() {  
+  // validate form here
+
+  var concept1 = $("#concept1").text()
+  var concept2 = $("input#concept2").val();
+  var relation = $("select#relationsMenu").val();
+  
+  if (concept1 == "") {
+  //Do something if concept1 is blank
+  //Maybe $("label#name_error").show();
+  }
+
+  if (concept2 == "") {
+  //Do something if concept2 is blank
+  }
+
+  if (concept2 == endConcept) {
+  var str = "YOU WON!!!!!!! Good job there.";
+  $("#linkButton").attr('disabled','disabled');
+  } else {
+  var str = concept1 + " " + relation + " " + concept2 + "<br />"
+  $("#concept1").text(concept2)
+  }
+  
+  $("#linkslist").append(str);
+ 
+
+  return false;
+});  
+
+
 });
-                           
 </script>
 
   <script type="text/javascript">
+  
+  
   function draw(){
-  var canvas = document.getElementById("canvas");  
+  var canvas = document.getElementById("canvas");
+  var padding = 10;
+  
   if (canvas.getContext){  
-  var ctx = canvas.getContext("2d");  
-  ctx.fillText('{{ concept1 }}', 60, 60);
-   ctx.beginPath();  
- ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle  
- ctx.stroke();   
+  var ctx = canvas.getContext("2d");
 
+  ctx.font = "1em sans-serif";
+  ctx.fillText('{{ concept1 }}', 60, 60);
+  // ctx.beginPath();  
+  // ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle  
+  // ctx.stroke();   
+
+
+  var metrics = ctx.measureText('hello');
+  draw_node(ctx, 0, 0, metrics.width + padding, metrics.height + padding);
+  ctx.fillText('hello', 0+padding/2, 10);
   } else {  
   // canvas-unsupported code here  
-  }  }                        
+  }  }
+
+
+  function draw_node(context, x, y, width, height) {
+  context.strokeRect(x, y, width, 20); 
+  };
   </script>
 </head>                                                                 
 
 <body onload="draw()">                                                                  
 
 <div id="visuals" class="visual">
-  <canvas id="canvas" width="150" height="150">Visualize your path in the game.</canvas>
+  <canvas id="canvas" width="500" height="200">Visualizes your path in the game.</canvas>
 </div>
 
 
-<div>Try to find a connection between {{ concept1 }} and {{ concept2 }}.</div>
+<div class="text">
+  Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
+  {{ concept2 }} </span>.
+</div>
 
+<div id="linkslist">
+
+</div>
 
 <div class="form">
-  <form name="relationForm" action="" method="" id="relationForm">
-  <input type="text" name="concept1" required="true"/>
-  <select name="relation" id="relationsMenu" list="relationsList" required="true">
+  <form name="linkForm" id="linkForm" action="" method="" >
+  <span class="concept" name="concept1" id="concept1">{{ concept1 }}</span>
+  <select name="relation" id="relationsMenu" required="true">
   </select>
-  <input type="text" name="concept2" required="true" />
-  <button action="" method="" name="submitButton" id="submitButton" type="submit">Submit</button>
+  <input type="text" name="concept2" id="concept2" required="true" />
+  <button name="submitButton" id="linkButton" type="submit">Submit</button>
   </form>
 </div>
 
 <button action="" method="" name="getConceptsButton"
 id="getConceptsButton" type="submit">Get New Concepts</button>
+
+<span class="text" name="numLinks" id="numLinks">Clicked on x links
 
 
 

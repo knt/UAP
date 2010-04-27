@@ -9,3 +9,70 @@
 
 ** TODO Graphics
    Using html canvas, probably
+
+
+
+** Hotter / Colder color-coded ? probably too difficult
+
+** Undo link
+** Num links
+
+
+
+http://ietherpad.com/8htfRVipcr
+
+
+* DONE Model 0
+** DONE Concepts come from hand made bucket of 10 concepts
+** DONE Clicking submit adds new line
+** DONE recognize when game has been won
+
+
+* TODO Model 1 
+** TODO get 1 point for every addition
+** TODO calculate total points
+** TODO tell them number of links used
+
+* Model 2
+** TODO Instead of 10 handpicked concepts, get random concepts
+
+* Model 3
+** TODO Refer to conceptnet to see how many points to award
+** TODO (3 points for rare, 2 for medium-rare, 1 for well-done)
+
+* Model 4
+** TODO Add some kind of user login facility
+** TODO But allow playing as guest
+** TODO Add points to the user for playing game
+
+* Model 5
+** TODO Have DB where "new assertions by user" can be recorded
+
+* Model 6
+** TODO Make it not look like crap part 1: add graphics and stuff
+** TODO Fix alignment of input form
+
+* Model 7
+** TODO Figure out what needs to be changed and make new plan.
+
+ ---------------------------------------------------------------------------
+
+Extra credit: HIgh Scores
+Say "you used 2 steps" blah blah did the same thing in like 200 steps
+
+Extra credit: Advertise the game to guests
+
+Extra credit: Hints
+User can click on "hints"
+
+Extra credit: Undo
+clicking undo to backtrack
+
+Extra Credit: Model infinity
+Make it not look like crap: random art from wikipedia
+
+
+TODO:
+** TODO can't add same concept twice: clown IsA clown
+** TODO Refresh vs. retyping/resubmitting url
+
