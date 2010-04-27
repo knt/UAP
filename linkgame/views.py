@@ -53,8 +53,12 @@ def get_random_from_CN(lang, num=2):
 #Try to cache?
 #Hard code? Don't we always want these to be in teh same order? Or we could just alphebetize?
 def get_all_relations(lang):
-    return [r.name for r in Relation.objects.all()]
+    return relations
+   #return get_relations_from_CN() #Gets the relations from the DB...warning, not at all are usable
 
+ 
+def get_relations_from_CN():
+    return [r.text for r in Relation.objects.all()]
 #print get_random_concepts('en')
 #print get_all_relations('en')
 
@@ -62,4 +66,32 @@ def get_all_relations(lang):
 random_cs = ["panda", "pony", "coffee", "notebook", "computer", "pen", "clown", "giraffe", "elephant"]
 
 
+
+
+
+
+relations = {"IsA": ["is a", "What kind of thing is it?", 5],
+             "HasA": ["has a", "What does it possess?", 16],
+             "PartOf": ["part of", "What is it a part of?", 21],
+             "UsedFor": ["used for", "What do you use it for?", 7],
+             "AtLocation": ["is located", "Where would you find it?", 6],
+             "CapableOf": ["is capable of", "What can it do?", 8],
+             "MadeOf": ["is made of", "What is it made of?", 4],
+             "CreatedBy": ["is created by", "How do you bring it into existence?", 25],
+             "HasSubevent": ["is accomplished by", "What do you do to accomplish it?", 19],
+             "HasFirstSubevent": ["is first accomplished by", "What do you do first to accomplish it?", 1],
+             "HasLastSubevent": ["is last accomplished by", "What do you do last to accomplish it?", 2],
+             "HasPrerequisite": ["is done by first", "What do you need to do first?", 3],
+             "MotivatedByGoal": ["is motivated by", "Why would you do it?", 9],
+             "Causes": ["causes", "What does it make happen?", 18],
+             "Desires": ["wants", "What does it want?", 10],
+             "CausesDesire": ["makes you want", "What does it make you want to do?", 17],
+             "HasProperty": ["has the property of", "What properties does it have?", 20],
+             "ReceivesAction": ["receives the action", "What can you do to it?", 22],
+             "DefinedAs" : ["is defined as", "How do you define it?", 13],
+             "SymbolOf" : ["is a symbol of", "What does it represent?", 15],
+             "LocatedNear" : ["is located near", "What is it typically near?", 30],
+             "ObstructedBy" : ["is prevented by", "What would prevent it from happening?", 23],
+             "ConceptuallyRelatedTo" : ["is conceptually related to", "What is related to it in an unknown way?", 12]
+             }
 

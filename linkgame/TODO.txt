@@ -19,6 +19,7 @@
 
 
 
+
 http://ietherpad.com/8htfRVipcr
 
 
@@ -27,19 +28,20 @@ http://ietherpad.com/8htfRVipcr
 ** DONE Clicking submit adds new line
 ** DONE recognize when game has been won
    
+* DONE Model 1 
+** DONE get 1 point for every addition
+** DONE calculate total points
+** DONE tell them number of links used
 
-* TODO Model 1 
-** TODO get 1 point for every addition
-** TODO calculate total points
-** TODO tell them number of links used
 
 * Model 2
+** DONE Put Relations into Natural Language form
 ** TODO Instead of 10 handpicked concepts, get random concepts
+
 
 * Model 3
 ** TODO Refer to conceptnet to see how many points to award
 ** TODO (3 points for rare, 2 for medium-rare, 1 for well-done)
-** TODO Put Relations into Natural Language form
 
 * Model 4
 ** TODO Add some kind of user login facility
@@ -56,8 +58,15 @@ http://ietherpad.com/8htfRVipcr
 * Model 7
 ** TODO Figure out what needs to be changed and make new plan.
 
- ---------------------------------------------------------------------------
 
+
+
+* TODO:
+** TODO can't add same concept twice: clown IsA clown
+** TODO Refresh vs. retyping/resubmitting url
+** TODO Process natural language text
+
+*  ---------------------------------------------------------------------------
 Extra credit: HIgh Scores
 Say "you used 2 steps" blah blah did the same thing in like 200 steps
 
@@ -72,8 +81,4 @@ clicking undo to backtrack
 Extra Credit: Model infinity
 Make it not look like crap: random art from wikipedia
 
-
-TODO:
-** TODO can't add same concept twice: clown IsA clown
-** TODO Refresh vs. retyping/resubmitting url
 

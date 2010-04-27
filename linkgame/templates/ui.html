@@ -16,8 +16,8 @@ $(document).ready(function(){
 var startConcept = '{{ concept1 }}';
 var endConcept = '{{ concept2 }}';
 
-{% for relation in relationsList %}
-$("#relationsMenu").append("<option value='{{ relation }}'>" + '{{ relation }}' + "</option>");
+{% for relation, relationInfo in relationsList.items %}
+$("#relationsMenu").append("<option value='{{ relation }}'>" + '{{ relationInfo.0 }}' + "</option>");
 {% endfor %}
 
 
