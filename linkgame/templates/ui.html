@@ -8,8 +8,8 @@
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>         
 <script type="text/javascript">
 
-
-
+var usedLinks = 0;
+var points = 0;
 
 $(document).ready(function(){
 
@@ -39,19 +39,36 @@ $("#linkButton").click(function() {
   }
 
   if (concept2 == endConcept) {
-  var str = "YOU WON!!!!!!! Good job there.";
+  var str = "You found a connection! Thanks for your contribution.";
   $("#linkButton").attr('disabled','disabled');
   } else {
   var str = concept1 + " " + relation + " " + concept2 + "<br />"
   $("#concept1").text(concept2)
   }
-  
-  $("#linkslist").append(str);
- 
+
+
+
+  addLink(str);
+
+  assignPoints(getPointValue());
+  $("#pointsVal").text(points);
 
   return false;
 });  
 
+  function assignPoints(p) {
+  points = points + p;
+  }
+
+  function getPointValue() {
+  return 1;
+  }
+
+  function addLink(str) {
+    $("#linkslist").append(str);
+    usedLinks = usedLinks + 1;
+    $("#linksVal").text(usedLinks);
+  }
 
 });
 </script>
@@ -115,9 +132,11 @@ $("#linkButton").click(function() {
 
 <button action="" method="" name="getConceptsButton"
 id="getConceptsButton" type="submit">Get New Concepts</button>
-
-<span class="text" name="numLinks" id="numLinks">Clicked on x links
-
+<br />
+<span class="text" name="numLinks" id="numLinks">You used <span
+id="linksVal">0</span> links</span> <br />
+<span class="text" name="points" id="points">You have <span
+id="pointsVal">0</span> points. </span>
 
 
 

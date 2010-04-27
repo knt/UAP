@@ -26,7 +26,7 @@ http://ietherpad.com/8htfRVipcr
 ** DONE Concepts come from hand made bucket of 10 concepts
 ** DONE Clicking submit adds new line
 ** DONE recognize when game has been won
-
+   
 
 * TODO Model 1 
 ** TODO get 1 point for every addition
@@ -39,6 +39,7 @@ http://ietherpad.com/8htfRVipcr
 * Model 3
 ** TODO Refer to conceptnet to see how many points to award
 ** TODO (3 points for rare, 2 for medium-rare, 1 for well-done)
+** TODO Put Relations into Natural Language form
 
 * Model 4
 ** TODO Add some kind of user login facility
