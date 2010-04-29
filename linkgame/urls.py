@@ -2,13 +2,15 @@ from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
 from linkgame.views import new_game
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
+                       (r'^$', login),
                        (r'^newgame/$', new_game),
-                       (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+                       (r'^accounts/login/$',  login),
                        (r'^accounts/logout/$', logout),
+
 
     # Example:
     # (r'^linkgame/', include('linkgame.foo.urls')),
