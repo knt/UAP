@@ -4,8 +4,11 @@
 <head>
 <title>LinkGame 0.1</title>
 <!-- <link rel="stylesheet" href="/media/style.css"> -->
-<script type="text/javascript"
-src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>         
+<link type="text/css" href="/site_media/game.css" rel="Stylesheet" />	
+<script type="text/javascript" src="/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
+
+<link type="text/css" href="/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
+<script type="text/javascript" src="/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
 <script type="text/javascript">
 
 var usedLinks = 0;
@@ -15,11 +18,55 @@ $(document).ready(function(){
 
 var startConcept = '{{ concept1 }}';
 var endConcept = '{{ concept2 }}';
-
-{% for relation, relationInfo in relationsList.items %}
-$("#relationsMenu").append("<option value='{{ relation }}'>" + '{{ relationInfo.0 }}' + "</option>");
+var cnetRelations = new Array();
+{% for relationInfo in relationsList %}
+//$("#relationsMenu").append("<option value='{{ relationInfo.0 }}'>" + '{{
+//  relationInfo.1.1 }}' + "</option>");
+  cnetRelations.push('{{ relationInfo.1.0 }}')
 {% endfor %}
 
+  $('#linkButton').button();
+  $('#getConceptsButton').button();
+  $("#relationsMenu").autocomplete({source: cnetRelations, delay: 0});
+  $("#relationsMenuB").button({icons: { primary:
+  "ui-icon-triangle-1-s"}, text: false});
+
+  $("#relationsMenuB").click(function() {
+					// close if already visible
+					if ($("#relationsMenu").autocomplete("widget").is(":visible")){
+   $("#relationsMenu").autocomplete("close");
+						
+					}
+					// pass empty string as value to search for, displaying all results
+					$("#relationsMenu").autocomplete("search",
+					" ");
+					$("#relationsMenu").focus();
+  return false;
+				});
+
+  
+  $("#relationsMenuB").position({ my: "left center", at: "right center", of: $("#relationsMenu"),
+					offset: "-1 0"
+				}).css("top", "").addClass("ui-corner-right ui-button-icon");
+
+  $("#relationsMenuB").height($("#relationsMenu").height());
+  
+  draw('{{ concept1 }}');
+
+  
+  //Queries ConceptNet to see if link is there
+  function queryCN() {
+  if (window.XMLHttpRequest) {
+  // code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+  else {
+  // code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  xmlhttp.open("")
+  }
 
   
 $("#linkButton").click(function() {  
@@ -27,7 +74,7 @@ $("#linkButton").click(function() {
 
   var concept1 = $("#concept1").text()
   var concept2 = $("input#concept2").val();
-  var relation = $("select#relationsMenu").val();
+  var relation = $("input#relationsMenu").val();
   
   if (concept1 == "") {
   //Do something if concept1 is blank
@@ -40,7 +87,7 @@ $("#linkButton").click(function() {
 
   if (concept2 == endConcept) {
   var str = "You found a connection! Thanks for your contribution.";
-  $("#linkButton").attr('disabled','disabled');
+  $("#linkButton").button( "option", "disabled", true )
   } else {
   var str = concept1 + " " + relation + " " + concept2 + "<br />"
   $("#concept1").text(concept2)
@@ -49,7 +96,7 @@ $("#linkButton").click(function() {
 
 
   addLink(str);
-
+  draw(concept2);
   assignPoints(getPointValue());
   $("#pointsVal").text(points);
 
@@ -74,43 +121,93 @@ $("#linkButton").click(function() {
 </script>
 
   <script type="text/javascript">
+
+  var lastx = (500 / 2);
+  var lasty = 2.5;
+  var drawArrow = false;
   
-  
-  function draw(){
+  function draw(str){
   var canvas = document.getElementById("canvas");
-  var padding = 10;
-  
+  var paddingW = 20;
+  var paddingH = 20;
+  var cvWidth = $("#canvas").width();
+
   if (canvas.getContext){  
   var ctx = canvas.getContext("2d");
-
+  ctx.textAlign = "center";
+  ctx.lineWidth = 1.0;
+  ctx.textBaseline = "middle";
   ctx.font = "1em sans-serif";
-  ctx.fillText('{{ concept1 }}', 60, 60);
+  ctx.lineJoin = "round";
+  //ctx.fillText('{{ concept1 }}', 60, 60);
   // ctx.beginPath();  
   // ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle  
   // ctx.stroke();   
 
 
-  var metrics = ctx.measureText('hello');
-  draw_node(ctx, 0, 0, metrics.width + padding, metrics.height + padding);
-  ctx.fillText('hello', 0+padding/2, 10);
+  var metrics = ctx.measureText(str);
+  var nodeWidth = metrics.width + paddingW;
+  var nodeHeight = 30;
+
+  if (drawArrow == true) {
+
+  var arrowLength = lasty + 30;
+
+  ctx.beginPath();
+  ctx.moveTo(lastx, lasty);
+  ctx.lineTo(lastx, arrowLength);
+  ctx.lineTo(lastx + 5, arrowLength - 5);
+  ctx.moveTo(lastx - 5, arrowLength - 5);
+  ctx.lineTo(lastx, arrowLength);
+  ctx.stroke();
+  ctx.closePath();
+
+  lasty = arrowLength + 6;
+
+}
+
+  draw_node(ctx, lastx-(nodeWidth/2), lasty, nodeWidth, nodeHeight);
+  ctx.fillText(str, lastx+(nodeWidth/2)-(nodeWidth/2), lasty+(nodeHeight/2));
+  lastx = lastx;
+  lasty = lasty + nodeHeight;
+
+drawArrow = true;
   } else {  
   // canvas-unsupported code here  
   }  }
 
 
   function draw_node(context, x, y, width, height) {
-  context.strokeRect(x, y, width, 20); 
+  context.strokeRect(x, y, width,  height );
   };
   </script>
 </head>                                                                 
 
-<body onload="draw()">                                                                  
+<body>                                                                  
 
-<div id="visuals" class="visual">
-  <canvas id="canvas" width="500" height="200">Visualizes your path in the game.</canvas>
+<div class="title">
+<h1>LinkGame 0.1</h1>
+  </div>
+
+<div class="nav">
+<ul>
+
+<li><a href="profile">Profile</a></li>
+<li><a href="news.asp">Points: 50 </a></li>
+<li><a href="default.asp">knt</a></li>
+</ul>
 </div>
 
 
+
+
+<div id="visuals" class="visual">
+  <canvas id="canvas" width="500" min-height="400">Visualizes your path in the game.</canvas>
+</div>
+
+
+
+<div id="userControls">
 <div class="text">
   Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
   {{ concept2 }} </span>.
@@ -123,9 +220,12 @@ $("#linkButton").click(function() {
 <div class="form">
   <form name="linkForm" id="linkForm" action="" method="" >
   <span class="concept" name="concept1" id="concept1">{{ concept1 }}</span>
-  <select name="relation" id="relationsMenu" required="true">
-  </select>
-  <input type="text" name="concept2" id="concept2" required="true" />
+  <!-- <select name="relation" id="relationsMenu" required="true">
+  </select>-->
+  <input type="text" name="relation" id="relationsMenu"
+  required="true" />
+  <button id="relationsMenuB" type=""></button>
+  <input type="text" name="concept2" id="concept2" class="conceptBox" required="true" />
   <button name="submitButton" id="linkButton" type="submit">Submit</button>
   </form>
 </div>
@@ -138,7 +238,7 @@ id="linksVal">0</span> links</span> <br />
 <span class="text" name="points" id="points">You have <span
 id="pointsVal">0</span> points. </span>
 
-
+</div>
 
   
 </body>                                                                 

@@ -48,6 +48,7 @@ http://ietherpad.com/8htfRVipcr
 ** TODO But allow playing as guest
 ** TODO Add points to the user for playing game
 
+** TODO Label arrows
 * Model 5
 ** TODO Have DB where "new assertions by user" can be recorded
 
@@ -82,3 +83,12 @@ Extra Credit: Model infinity
 Make it not look like crap: random art from wikipedia
 
 
+
+
+
+1. Is there a way to go from "A panda is an animal" to figure out how that's represented in conceptnet?
+"What about "A panda eats bamboo"?
+
+
+RawAssertion
+2. 
