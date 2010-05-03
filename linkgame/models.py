@@ -1,6 +1,0 @@
-
-
-
-
-class OwnedLink(models.Model):
-    

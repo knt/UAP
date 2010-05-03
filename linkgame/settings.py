@@ -80,5 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'csc.conceptnet4',
+    'csc.conceptnet',
+    'csc.webapi',
+    'linkgame.trek',
 )

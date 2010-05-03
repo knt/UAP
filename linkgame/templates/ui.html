@@ -3,18 +3,18 @@
 <html>                                                                
 <head>
 <title>LinkGame 0.1</title>
-<!-- <link rel="stylesheet" href="/media/style.css"> -->
-<link type="text/css" href="/site_media/game.css" rel="Stylesheet" />	
-<script type="text/javascript" src="/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
-<link type="text/css" href="/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
-<script type="text/javascript" src="/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
+<!-- <link rel="stylesheet" href="/site_media/style.css"> -->
+<link type="text/css" href="/trek/site_media/game.css" rel="Stylesheet" />	
+<script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
+<link type="text/css" href="/trek/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
+<script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
 <script type="text/javascript">
 
 
 //Global Variables
 var usedLinks = 0;
 var points = 0;
-var cnurl = "http://openmind.media.mit.edu";
+var cnurl = "/api";
 
 
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
 	var cnetRelations = new Array(); 
 
 
-	inCN("pando");
+	inCN("pandeee");
 
 	//Gets Relations
 	{% for relationInfo in relationsList %}
@@ -119,14 +119,15 @@ $(document).ready(function(){
 function inCN(concept) {
 
 	$.ajax({
-		url: cnurl+'/api/en/concept/'+concept+ '/',
-		dataType: 'jsonp',
+		url: cnurl+'en/concept/'+concept+ '/',
 		type: 'get',
-		success: function(data) {
-			alert("it's there");
+		success: function(data, status, x) {
+                        console.log("It was there");
+			return true;
 		},
 		error: function() {
-			alert("it wasn't there");
+                        console.log("It wasn't there");
+			return false;
 		}
 	});
 };
