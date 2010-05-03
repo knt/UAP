@@ -6,118 +6,133 @@
 <!-- <link rel="stylesheet" href="/media/style.css"> -->
 <link type="text/css" href="/site_media/game.css" rel="Stylesheet" />	
 <script type="text/javascript" src="/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
-
 <link type="text/css" href="/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
 <script type="text/javascript" src="/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
 <script type="text/javascript">
 
+
+//Global Variables
 var usedLinks = 0;
 var points = 0;
+var cnurl = "http://openmind.media.mit.edu";
+
+
 
 $(document).ready(function(){
+	var startConcept = '{{ concept1 }}';
+	var endConcept = '{{ concept2 }}';
+	var cnetRelations = new Array(); 
 
-var startConcept = '{{ concept1 }}';
-var endConcept = '{{ concept2 }}';
-var cnetRelations = new Array();
-{% for relationInfo in relationsList %}
-//$("#relationsMenu").append("<option value='{{ relationInfo.0 }}'>" + '{{
-//  relationInfo.1.1 }}' + "</option>");
-  cnetRelations.push('{{ relationInfo.1.0 }}')
-{% endfor %}
 
-  $('#linkButton').button();
-  $('#getConceptsButton').button();
-  $("#relationsMenu").autocomplete({source: cnetRelations, delay: 0});
-  $("#relationsMenuB").button({icons: { primary:
-  "ui-icon-triangle-1-s"}, text: false});
+	inCN("pando");
 
-  $("#relationsMenuB").click(function() {
-					// close if already visible
+	//Gets Relations
+	{% for relationInfo in relationsList %}
+	//$("#relationsMenu").append("<option value='{{ relationInfo.0 }}'>" + '{{
+	//  relationInfo.1.1 }}' + "</option>");
+  		cnetRelations.push('{{ relationInfo.1.0 }}')
+	{% endfor %}
+
+
+	//jQuery UI
+  	$('#linkButton').button();	
+	$('#getConceptsButton').button();
+  	$("#relationsMenu").autocomplete({source: cnetRelations, delay: 0});
+  	$("#relationsMenuB").button({icons: { primary: "ui-icon-triangle-1-s"}, text: false});
+
+	//Sets up AutoComplete button
+  	$("#relationsMenuB").click(function() {
+  					// close if already visible
 					if ($("#relationsMenu").autocomplete("widget").is(":visible")){
-   $("#relationsMenu").autocomplete("close");
-						
+   						$("#relationsMenu").autocomplete("close");
 					}
 					// pass empty string as value to search for, displaying all results
-					$("#relationsMenu").autocomplete("search",
-					" ");
+					$("#relationsMenu").autocomplete("search", " ");
 					$("#relationsMenu").focus();
-  return false;
-				});
+  					return false; //So that the form does not submit
+					});
 
   
-  $("#relationsMenuB").position({ my: "left center", at: "right center", of: $("#relationsMenu"),
-					offset: "-1 0"
-				}).css("top", "").addClass("ui-corner-right ui-button-icon");
-
-  $("#relationsMenuB").height($("#relationsMenu").height());
+  	$("#relationsMenuB").position({ my: "left center", at: "right center", of: $("#relationsMenu"), offset: "-1 0"}).css("top", "").addClass("ui-corner-right ui-button-icon");
+	$("#relationsMenuB").height($("#relationsMenu").height());
   
-  draw('{{ concept1 }}');
-
   
-  //Queries ConceptNet to see if link is there
-  function queryCN() {
-  if (window.XMLHttpRequest) {
-  // code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-  else {
-  // code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
+  	//Draws the first concept in the canvas
+  	draw('{{ concept1 }}');
 
-  xmlhttp.open("")
-  }
 
+
+
+	$("#linkButton").click(function() {  
+		// validate form here
+		var concept1 = $("#concept1").text()
+  		var concept2 = $("input#concept2").val();
+  		var relation = $("input#relationsMenu").val();
   
-$("#linkButton").click(function() {  
-  // validate form here
+ 		if (concept1 == "") {
+		  //Do something if concept1 is blank
+		  //Maybe $("label#name_error").show();
+		}
 
-  var concept1 = $("#concept1").text()
-  var concept2 = $("input#concept2").val();
-  var relation = $("input#relationsMenu").val();
-  
-  if (concept1 == "") {
-  //Do something if concept1 is blank
-  //Maybe $("label#name_error").show();
-  }
+  		if (concept2 == "") {
+  			//Do something if concept2 is blank
+  		}
 
-  if (concept2 == "") {
-  //Do something if concept2 is blank
-  }
+  		if (concept2 == endConcept) {
+  			var str = "You found a connection! Thanks for your contribution.";
+			$("#linkButton").button( "option", "disabled", true )
+		} else {
+  			var str = concept1 + " " + relation + " " + concept2 + "<br />"
+  			$("#concept1").text(concept2)
+  		}
 
-  if (concept2 == endConcept) {
-  var str = "You found a connection! Thanks for your contribution.";
-  $("#linkButton").button( "option", "disabled", true )
-  } else {
-  var str = concept1 + " " + relation + " " + concept2 + "<br />"
-  $("#concept1").text(concept2)
-  }
+	  	addLink(str);
+	  	draw(concept2);
+		assignPoints(getPointValue());
+  		$("#pointsVal").text(points);
 
+  		return false;
+	}); 
 
 
-  addLink(str);
-  draw(concept2);
-  assignPoints(getPointValue());
-  $("#pointsVal").text(points);
 
-  return false;
-});  
+	function assignPoints(p) {
+  		points = points + p;
+  	}
 
-  function assignPoints(p) {
-  points = points + p;
-  }
+  	function getPointValue() {
+  		return 1;
+  	}
 
-  function getPointValue() {
-  return 1;
-  }
+  	function addLink(str) {
+    	$("#linkslist").append(str);
+    	usedLinks = usedLinks + 1;
+    	$("#linksVal").text(usedLinks);
+  	}
 
-  function addLink(str) {
-    $("#linkslist").append(str);
-    usedLinks = usedLinks + 1;
-    $("#linksVal").text(usedLinks);
-  }
 
 });
+  
+  
+//Queries ConceptNet to see if link is there
+//Returns true if it is, false if it isn't
+function inCN(concept) {
+
+	$.ajax({
+		url: cnurl+'/api/en/concept/'+concept+ '/',
+		dataType: 'jsonp',
+		type: 'get',
+		success: function(data) {
+			alert("it's there");
+		},
+		error: function() {
+			alert("it wasn't there");
+		}
+	});
+};
+
+  
+
 </script>
 
   <script type="text/javascript">

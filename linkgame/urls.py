@@ -11,7 +11,7 @@ urlpatterns = patterns('',
                        (r'^accounts/login/$',  login),
                        (r'^accounts/logout/$', logout),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-                        {'document_root': '/Users/ntreadway/linkgame/media'}),
+                        {'document_root': './media'}),
 
 
     # Example:
