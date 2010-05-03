@@ -1,0 +1,1 @@
+/Users/ntreadway/omcs/conceptnet/csc/webapi/templates/documentation.txt
