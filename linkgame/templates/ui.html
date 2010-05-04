@@ -14,23 +14,25 @@
 //Global Variables
 var usedLinks = 0;
 var points = 0;
-var cnurl = "/api";
+var cnurl = "/api/en";
 
 
 
 $(document).ready(function(){
 	var startConcept = '{{ concept1 }}';
 	var endConcept = '{{ concept2 }}';
-	var cnetRelations = new Array(); 
+	var cnetRelations = new Array();
+        var cnetRelationsD = {};
 
 
-	inCN("pandeee");
+	
 
 	//Gets Relations
 	{% for relationInfo in relationsList %}
 	//$("#relationsMenu").append("<option value='{{ relationInfo.0 }}'>" + '{{
 	//  relationInfo.1.1 }}' + "</option>");
   		cnetRelations.push('{{ relationInfo.1.0 }}')
+	        cnetRelationsD['{{ relationInfo.1.0 }}'] = '{{ relationInfo.0 }}'
 	{% endfor %}
 
 
@@ -86,6 +88,7 @@ $(document).ready(function(){
   			$("#concept1").text(concept2)
   		}
 
+	        var exists = assertionExists(cnetRelationsD[relation], concept1, concept2);
 	  	addLink(str);
 	  	draw(concept2);
 		assignPoints(getPointValue());
@@ -131,6 +134,31 @@ function inCN(concept) {
 		}
 	});
 };
+
+function assertionExists(rel, concept1, concept2) {
+
+      $.ajax({
+           url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/'
++ concept2 + '/',
+           type: 'get',
+           success: function(data, status, x) {
+               if (data == '[]') {
+               		console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
+              
+					return (false);
+				}
+               		console.log("%s,%s,%s was there", rel, concept1, concept2);              
+               		
+               		var assertion = eval(data);
+               		console.log(data.concept1);
+               		console.log("Assertion", assertion);
+               		return (true);
+        		}
+
+});
+
+
+}
 
   
 
