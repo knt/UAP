@@ -1,3 +1,5 @@
+-*- mode: org -*-
+#+STARTUP: hidestars
 
 
 
@@ -37,11 +39,13 @@ http://ietherpad.com/8htfRVipcr
 * Model 2
 ** DONE Put Relations into Natural Language form
 ** TODO Instead of 10 handpicked concepts, get random concepts
+
 *** TODO Done-ish....ask Rob why it doesn't work on CSC
 
+
 * Model 3
-** TODO Refer to conceptnet to see how many points to award
-** TODO (3 points for rare, 2 for medium-rare, 1 for well-done)
+** DONE Refer to conceptnet to see how many points to award
+** DONE (3 points for rare, 2 for medium-rare, 1 for well-done)
 
 
 * Model 4

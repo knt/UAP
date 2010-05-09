@@ -5,6 +5,10 @@
 <title>LinkGame 0.1</title>
 <!-- <link rel="stylesheet" href="/site_media/style.css"> -->
 <link type="text/css" href="/trek/site_media/game.css" rel="Stylesheet" />	
+
+<script type='text/javascript' src='http://www.google.com/jsapi'></script>
+
+
 <script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
 <link type="text/css" href="/trek/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
 <script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
@@ -15,6 +19,9 @@
 var usedLinks = 0;
 var points = 0;
 var cnurl = "/api/en";
+var upperThresh = 10;
+var midThresh = 5;
+var lowThresh = 0;
 
 
 
@@ -24,8 +31,6 @@ $(document).ready(function(){
 	var cnetRelations = new Array();
         var cnetRelationsD = {};
 
-
-	
 
 	//Gets Relations
 	{% for relationInfo in relationsList %}
@@ -84,16 +89,71 @@ $(document).ready(function(){
   			var str = "You found a connection! Thanks for your contribution.";
 			$("#linkButton").button( "option", "disabled", true )
 		} else {
-  			var str = concept1 + " " + relation + " " + concept2 + "<br />"
+  			var str = concept1 + " " + relation + " " + concept2;
   			$("#concept1").text(concept2)
   		}
 
-	        var exists = assertionExists(cnetRelationsD[relation], concept1, concept2);
-	  	addLink(str);
-	  	draw(concept2);
-		assignPoints(getPointValue());
-  		$("#pointsVal").text(points);
 
+
+		var rel = cnetRelationsD[relation];
+      $.ajax({
+           url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/' + concept2 + '/',
+           type: 'get',
+           async: true,
+           dataType: 'json',
+           success: function(data, status, x) {
+               if (data == '[]') {
+               		console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
+              
+					return (null);
+				} else {               		
+               		var assertion = data[0];
+               		console.log(assertion);
+               		
+               		if (assertion != null) {
+	    				var score = assertion.score;
+	    				str = str + ": Score is " + score + " on ConceptNet" + "<br />";
+	    				addLink(str);
+	  					draw(concept2);
+	  		
+	  				if (parseInt(score) >=  upperThresh) {
+	  		 			assignPoints(1);
+	  				} else if (parseInt(score) >= midThresh) {
+	  					assignPoints(2);
+	  				} else if (parseInt(score) >= midThresh) {
+	  					assignPoints(3);
+	  				}
+	  			
+	  				assignPoints(1);
+	  		
+  						
+	    			} else {
+	     				str = str + ": Not found in ConceptNet" + "<br />";
+	     				addLink(str);
+	     				draw(concept2);
+	     				assignPoints(5);
+	     				$("#pointsVal").text(points);
+	     					
+	   	 			}
+	   	 			
+	   	 			
+	   	 			
+
+        		}
+        		
+        	},
+        	error: function() {
+	     		str = str + ": Not found in ConceptNet" + "<br />";
+	     		addLink(str);
+	     		draw(concept2);
+	     		assignPoints(5);
+	     		$("#pointsVal").text(points);
+        	}
+
+});
+
+		$("#pointsVal").text(points);
+	    
   		return false;
 	}); 
 
@@ -103,7 +163,7 @@ $(document).ready(function(){
   		points = points + p;
   	}
 
-  	function getPointValue() {
+  	function getPointValue(score) {
   		return 1;
   	}
 
@@ -137,25 +197,6 @@ function inCN(concept) {
 
 function assertionExists(rel, concept1, concept2) {
 
-      $.ajax({
-           url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/'
-+ concept2 + '/',
-           type: 'get',
-           success: function(data, status, x) {
-               if (data == '[]') {
-               		console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
-              
-					return (false);
-				}
-               		console.log("%s,%s,%s was there", rel, concept1, concept2);              
-               		
-               		var assertion = eval(data);
-               		console.log(data.concept1);
-               		console.log("Assertion", assertion);
-               		return (true);
-        		}
-
-});
 
 
 }
@@ -283,6 +324,8 @@ id="linksVal">0</span> links</span> <br />
 id="pointsVal">0</span> points. </span>
 
 </div>
+
+<div id='chart_div'></div>
 
   
 </body>                                                                 
