@@ -1,14 +1,43 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html> <head>
-<title></title>
-</head>
+<!DOCTYPE html>
 
-<body>
-<h1></h1>
+<html>                                                                
+<head>
+<title>LinkGame 0.1</title>
+<!-- <link rel="stylesheet" href="/site_media/style.css"> -->
+<link type="text/css" href="/trek/site_media/game.css" rel="Stylesheet" />	
+
+<script type='text/javascript' src='http://www.google.com/jsapi'></script>
 
 
+<script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-1.4.2.min.js"></script>
+<link type="text/css" href="/trek/site_media/jqueryui/css/ui-lightness/jquery-ui-1.8.custom.css" rel="Stylesheet" />	
+<script type="text/javascript" src="/trek/site_media/jqueryui/js/jquery-ui-1.8.custom.min.js"></script>
 
-<hr>
-<address></address>
-<!-- hhmts start --> Last modified: Mon Apr 26 18:03:30 EDT 2010 <!-- hhmts end -->
-</body> </html>
+
+</head>                                                                 
+
+<body>                                                                  
+
+<div class="title">
+<h1>LinkGame 0.1</h1>
+  </div>
+
+<div class="nav">
+<ul>
+
+{% if user.is_authenticated %}
+<li><a href="/accounts/logout/?next=/trek/newgame/">Logout</a></li>
+<li><a href="profile">Profile</a></li>
+<li><a href="news.asp">Points: 50 </a></li>
+<li><a href="default.asp">
+{{ user.username }}
+</a></li>
+{% else %}
+
+<li><a href="/accounts/login/?next=/trek/newgame/">Log In</a></li>
+{% endif %}
+
+</ul>
+</div>
+
+

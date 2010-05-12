@@ -1,17 +1,20 @@
 from django.http import HttpResponse
+from django.template import RequestContext
 from django.shortcuts import render_to_response
 #from commonsense.queries import get_random_concepts
 from csc.conceptnet4.models import Concept, Relation, RawAssertion
+from django.contrib.auth.decorators import login_required
 import random
 
 
 
+@login_required
 def new_game(request):
     print "Getting concepts"
 
     relations =  get_all_relations('en')
     concept1, concept2 = get_random_concepts('en')
-    return render_to_response('ui.html', {'concept1': concept1, 'concept2': concept2, 'relationsList': relations})
+    return render_to_response('ui.html', {'concept1': concept1, 'concept2': concept2, 'relationsList': relations}, context_instance=RequestContext(request))
 
 #concepts = get_random_concepts(language, 10)
 def get_random_concepts(lang):
