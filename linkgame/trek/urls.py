@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
-from trek.views import new_game, update_points, claim_link
+from trek.views import new_game, update_points, claim_link, profile
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -14,7 +14,8 @@ urlpatterns = patterns('',
                         {'document_root': './trek/media'}),
                        (r'^newgame/addpoints/(?P<p>.*)$', update_points),
                        (r'^newgame/claim/$', claim_link),
-
+                       (r'^user/(?P<username>\w{1,50})/profile/$', profile),
+          
 
     # Example:
     # (r'^linkgame/', include('linkgame.foo.urls')),

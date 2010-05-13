@@ -1,17 +1,12 @@
 -*- mode: org -*-
 #+STARTUP: hidestars
 
-
-
-
 ** TODO Suggest next step
    This would suggest a possible new link, in case the user is stuck.
    There is some method that finds these paths...look in CNet API.
    
-
 ** TODO Graphics
    Using html canvas, probably
-
 
 
 ** Hotter / Colder color-coded ? probably too difficult
@@ -43,24 +38,27 @@ http://ietherpad.com/8htfRVipcr
 ** DONE Refer to conceptnet to see how many points to award
 ** DONE (3 points for rare, 2 for medium-rare, 1 for well-done)
 
-
-* Model 4
+* DONE Model 4
 ** DONE Add some kind of user login facility
-** TODO Add points to the user for playing game
-** TODO Allow users to "claim" links
+** DONE Add points to the user for playing game
+** DONE Allow users to "claim" links
+
 
 * Model 4.5
 ** TODO Profile Page
+** TODO Clicking on "Claim Link" 
 ** TODO "Loading" gif / disable submit button while searching CNET
-** TODO Label arrows
 ** TODO Instead of 10 handpicked concepts, get random concepts
+
 
 * Model 5
 ** TODO Have DB where "new assertions by user" can be recorded
+** TODO Make code check both conceptnet AND the claimed link database
 
 * Model 6
 ** TODO Make it not look like crap part 1: add graphics and stuff
 ** TODO Fix alignment of input form
+** TODO Label arrows
 
 * Model 7
 ** TODO Figure out what needs to be changed and make new plan.
