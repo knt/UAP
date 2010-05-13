@@ -35,15 +35,11 @@ http://ietherpad.com/8htfRVipcr
 ** DONE calculate total points
 ** DONE tell them number of links used
 
-
-* Model 2
+* DONE Model 2
 ** DONE Put Relations into Natural Language form
-** TODO Instead of 10 handpicked concepts, get random concepts
+** DONE Done-ish....ask Rob why it doesn't work on CSC
 
-*** TODO Done-ish....ask Rob why it doesn't work on CSC
-
-
-* Model 3
+* DONE Model 3
 ** DONE Refer to conceptnet to see how many points to award
 ** DONE (3 points for rare, 2 for medium-rare, 1 for well-done)
 
@@ -51,8 +47,14 @@ http://ietherpad.com/8htfRVipcr
 * Model 4
 ** DONE Add some kind of user login facility
 ** TODO Add points to the user for playing game
+** TODO Allow users to "claim" links
 
+* Model 4.5
+** TODO Profile Page
+** TODO "Loading" gif / disable submit button while searching CNET
 ** TODO Label arrows
+** TODO Instead of 10 handpicked concepts, get random concepts
+
 * Model 5
 ** TODO Have DB where "new assertions by user" can be recorded
 

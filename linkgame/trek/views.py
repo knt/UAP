@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 #from commonsense.queries import get_random_concepts
 from csc.conceptnet4.models import Concept, Relation, RawAssertion
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from trek.models import ClaimedLink
 import random
 
 
@@ -23,13 +23,14 @@ def new_game(request):
 
 
 @login_required
-def update_points(request):
+def update_points(request, p):
     if request.method == 'POST':
         try: 
-            p = request.POST.get("points")
+            p = int(p)
+            print p
             print "Updating profile"
             profile = request.user.profile
-            profile.points = F('points') + p
+            profile.points += p
             profile.save()
         except:
             return Http404()
@@ -38,6 +39,37 @@ def update_points(request):
     else:
         raise Http404()
 
+
+@login_required
+def claim_link(request):
+    if request.method == 'GET':
+        try:
+            print "Getting claimed link request"
+            c1 = request.GET.get('c1')
+            c2 = request.GET.get('c2')
+            rel = request.GET.get('relation')
+
+
+            claimed = ClaimedLink.objects.get(concept1=c1, concept2=c2, relation=rel)
+            
+        except ClaimedLink.DoesNotExist:
+            print "claimed link does not exit"
+            claimed = None            
+        except:
+            print "wuh oh"
+            return Http404()
+
+        print "made it this far"
+        
+        if not(claimed):
+            claimed = ClaimedLink(concept1=c1, concept2=c2, relation=rel, userid=request.user)
+            claimed.save()
+            return HttpResponse()
+        else:
+            return HttpResponse("Already Claimed")
+
+
+        
     
 #concepts = get_random_concepts(language, 10)
 def get_random_concepts(lang):

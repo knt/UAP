@@ -1,14 +1,67 @@
 
 {% include 'base.html' %}
 
+<div id="visuals" class="visual">
+  <canvas id="canvas" width="500" min-height="400">Visualizes your path in the game.</canvas>
+</div>
+
+
+
+<div id="userControls">
+<div class="text">
+  Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
+  {{ concept2 }} </span>.
+</div>
+
+<div id="linkslist">
+
+</div>
+
+<div class="form">
+  <form name="linkForm" id="linkForm" action="" method="" >
+  <span class="concept" name="concept1" id="concept1">{{ concept1 }}</span>
+  <!-- <select name="relation" id="relationsMenu" required="true">
+  </select>-->
+  <input type="text" name="relation" id="relationsMenu"
+  required="true" />
+  <button id="relationsMenuB" type=""></button>
+  <input type="text" name="concept2" id="concept2" class="conceptBox" required="true" />
+  <button name="submitButton" id="linkButton" type="submit">Submit</button>
+  </form>
+</div>
+
+<button action="" method="" name="getConceptsButton"
+id="getConceptsButton" type="submit">Get New Concepts</button>
+<br />
+<span class="text" name="numLinks" id="numLinks">You used <span
+id="linksVal">0</span> links</span> <br />
+<span class="text" name="points" id="points">You have <span
+id="pointsVal">0</span> points. </span>
+
+</div>
+
+<div id='chart_div'></div>
+
+  
+</body>                                                                 
+</html>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/trek/site_media/game.js"></script>
 <script type="text/javascript">
 
 
 //Global Variables
 
 ///Game Constants
-var upperThresh = 10;
-var midThresh = 5;
+var upperThresh = 8;
+var midThresh = 2;
 var lowThresh = 0;
 
 ///Starting Game Variables
@@ -20,7 +73,7 @@ var cnetRelations = new Array();
 var cnetRelationsD = {};
 
 ///URLS
-var cnurl = "http://openmind.media.mit.edu/api/en";
+var cnurl = "/api/en";
 
 
 
@@ -57,9 +110,9 @@ function linkSubmit() {
   	
 
 	//Get the CNet form of the relation, if its an official CNet relation
-	var rel = "";
-	rel = cnetRelationsD[relation];
-//	if (cnetRelationsD.Exists(relation)) {
+	var relCN = "";
+	relCN = cnetRelationsD[relation];
+//	if (cnetRelationsD.hasKey(relation)) {
 //		rel = cnetRelationsD[relation];
 //	} else {
 //		rel = relation;
@@ -67,19 +120,17 @@ function linkSubmit() {
 	
 	
 	
-	var str = "";
+	var msg = "";
 	var score = 0;
 	
 	$.ajax({
-		url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/' + concept2 + '/',
+		url:cnurl + '/assertionfind/' + relCN + '/' + concept1 + '/' + concept2 + '/',
 		type: 'get',
         async: true,
         dataType: 'json',
         success: function(data, status, x) {
-        
-        	console.log(data);
         	if (data == '[]' || data == 'Not Found') {
-       			console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
+       			console.log("%s,%s,%s wasn't there", relCN, concept1, concept2);
 
 			} else {               		
                	var assertion = data[0];
@@ -102,40 +153,17 @@ function linkSubmit() {
 	  				}
 	    			
 	    			//Add the following link info to the display
-	    			str = concept1 + " " + relation + " " + concept2 + ": Score is " + score + " on ConceptNet" + "<br />";
-	    			addLink(str);
-	    			
-	    			//Draw the concept on the visual
-	  				draw(concept2);
-	  				
-	  				//Set the next left concept to the form right concept
- 					$("#concept1").text(concept2);
-	  		
+	    			msg = concept1 + " " + relation + " " + concept2 + ": Score is " + score + " on ConceptNet";
 
-					//TODO: Vote on the concept in ConceptNet
-	  			
-	  				//Update the points 
-	     			$("#pointsVal").text(points);
-	  		
+	    				  		
   				//If the Assertion IS NOT in ConceptNet		
 	    		} else {
 	    			//Assign points
 	    			assignPoints(5);
 	    			
 	    			//Add the following link info the display
-	     			str = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet" + "<br />";
-	     			addLink(str);
-	     			
-	     			//Draw the concept on the visual	
-	     			draw(concept2);
-	     				
-	     			//Set the next left concept to the form right concept
-	     			$("#concept1").text(concept2);
-	     			
-	     			//Update the points 
-	     			$("#pointsVal").text(points);
-	     			
-	     			//TODO: Vote on the concept in ConceptNet
+	     			msg = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet";
+	     			msg = msg + "<span class='claim'> <a href='#null' onClick=\"claim('" + concept1 + "','" + relCN + "','" + concept2 + "');\">" + "Claim Link" + "</a></span>";
 	   	 		}
 	   	 	}
         		
@@ -145,19 +173,36 @@ function linkSubmit() {
 	    		assignPoints(5);
 	    			
 	    		//Add the following link info the display
-	     		str = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet" + "<br />";
-	     		addLink(str);
-	     			
-	     		//Draw the concept on the visual	
-	     		draw(concept2);
-	     				
-	     		//Set the next left concept to the form right concept
-	     		$("#concept1").text(concept2);
-	     			
-	     		//Update the points 
-	     		$("#pointsVal").text(points);
-	     			
-	     		//TODO: Vote on the concept in ConceptNet
+	     		msg = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet";
+	     		msg = msg + "<span class='claimLink'> <a href='#null' onClick=\"claim('" + concept1 + "','" + relCN + "','" + concept2 + "');\">" + "Claim Link" + "</a></span>";
+	     		
+	     		
+        },
+        complete: function() {
+        	msg = msg + "<br />"
+        	addLink(msg);
+        	
+	        //Set the next left concept to the form right concept
+	    	$("#concept1").text(concept2);
+        
+    	    //Update the points 
+	    	$("#pointsVal").text(points);
+        
+        		     			
+	     	//Draw the concept on the visual	
+	     	draw(concept2);
+        
+	        //Winning the game...the second concept equals the target concept
+		  	if (concept2 == endConcept.toLowerCase()) {
+  				var str = "You found a connection! Thanks for your contribution.";
+				$("#linkButton").button( "option", "disabled", true );
+				userWins($("#pointsVal").text());
+			}
+        
+        
+	        //TODO: Vote on the concept in ConceptNet
+        
+        
         }
         
         
@@ -166,16 +211,17 @@ function linkSubmit() {
 	
 	
 	
-	//Winning the game...the second concept equals the target concept
-  	if (concept2 == endConcept.toLowerCase()) {
-  		var str = "You found a connection! Thanks for your contribution.";
-		$("#linkButton").button( "option", "disabled", true );
-	
-	}
+
 	return false;
 	
 			
 }
+
+
+
+
+
+
 
 
 $(document).ready(function(){
@@ -298,50 +344,3 @@ drawArrow = true;
   context.strokeRect(x, y, width,  height );
   };
   </script>
-
-
-
-<div id="visuals" class="visual">
-  <canvas id="canvas" width="500" min-height="400">Visualizes your path in the game.</canvas>
-</div>
-
-
-
-<div id="userControls">
-<div class="text">
-  Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
-  {{ concept2 }} </span>.
-</div>
-
-<div id="linkslist">
-
-</div>
-
-<div class="form">
-  <form name="linkForm" id="linkForm" action="" method="" >
-  <span class="concept" name="concept1" id="concept1">{{ concept1 }}</span>
-  <!-- <select name="relation" id="relationsMenu" required="true">
-  </select>-->
-  <input type="text" name="relation" id="relationsMenu"
-  required="true" />
-  <button id="relationsMenuB" type=""></button>
-  <input type="text" name="concept2" id="concept2" class="conceptBox" required="true" />
-  <button name="submitButton" id="linkButton" type="submit">Submit</button>
-  </form>
-</div>
-
-<button action="" method="" name="getConceptsButton"
-id="getConceptsButton" type="submit">Get New Concepts</button>
-<br />
-<span class="text" name="numLinks" id="numLinks">You used <span
-id="linksVal">0</span> links</span> <br />
-<span class="text" name="points" id="points">You have <span
-id="pointsVal">0</span> points. </span>
-
-</div>
-
-<div id='chart_div'></div>
-
-  
-</body>                                                                 
-</html>

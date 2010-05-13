@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
-from trek.views import new_game
+from trek.views import new_game, update_points, claim_link
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -12,6 +12,8 @@ urlpatterns = patterns('',
                        (r'^accounts/logout/$', logout),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
                         {'document_root': './trek/media'}),
+                       (r'^newgame/addpoints/(?P<p>.*)$', update_points),
+                       (r'^newgame/claim/$', claim_link),
 
 
     # Example:
