@@ -7,11 +7,12 @@
   {% endif %}
 
   <form action="" class="login" method="post">
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
+    <div class="field"><label for="username">Username:</label>
+    <input type="text" name="username" value="" id="username"></div>
 
+    <div class="field"><label for="password">Password:</label>
+    <input type="password" name="password" value="" id="password">
+      </div>
     <input type="submit" value="login" />
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>

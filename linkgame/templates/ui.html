@@ -5,33 +5,188 @@
 
 
 //Global Variables
-var usedLinks = 0;
-var points = 0;
-var cnurl = "/api/en";
+
+///Game Constants
 var upperThresh = 10;
 var midThresh = 5;
 var lowThresh = 0;
 
+///Starting Game Variables
+var startConcept = '{{ concept1 }}';
+var endConcept = '{{ concept2 }}';
+var usedLinks = 0;
+var points = 0;
+var cnetRelations = new Array();
+var cnetRelationsD = {};
+
+///URLS
+var cnurl = "http://openmind.media.mit.edu/api/en";
+
+
+
+//Gets Relations from view
+{% for relationInfo in relationsList %}
+	cnetRelations.push('{{ relationInfo.1.0 }}') 
+	cnetRelationsD['{{ relationInfo.1.0 }}'] = '{{ relationInfo.0 }}'    //Maps natural language relation to CNet Relation name
+{% endfor %}
+
+
+
+
+//Fires when the main game form is submitted
+function linkSubmit() {
+	//Grabs info from form
+	var concept1 = $("#concept1").text().toLowerCase();
+  	var concept2 = $("input#concept2").val().toLowerCase();
+  	var relation = $("input#relationsMenu").val();
+
+	//Validate form
+	if (concept1 == "") {
+		//Do something if concept1 is blank
+		//Maybe $("label#name_error").show();
+	}
+	
+	if (concept2 == "") {
+ 		//Do something if concept2 is blank
+  	}
+  	
+  	if (relation == "") {
+ 		//Do something if relation is blank 	
+  	}
+  	
+  	
+
+	//Get the CNet form of the relation, if its an official CNet relation
+	var rel = "";
+	rel = cnetRelationsD[relation];
+//	if (cnetRelationsD.Exists(relation)) {
+//		rel = cnetRelationsD[relation];
+//	} else {
+//		rel = relation;
+//	}
+	
+	
+	
+	var str = "";
+	var score = 0;
+	
+	$.ajax({
+		url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/' + concept2 + '/',
+		type: 'get',
+        async: true,
+        dataType: 'json',
+        success: function(data, status, x) {
+        
+        	console.log(data);
+        	if (data == '[]' || data == 'Not Found') {
+       			console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
+
+			} else {               		
+               	var assertion = data[0];
+               		
+               	//If the Assertion IS in ConceptNet	
+               	if (assertion != null) {
+               	
+               		//Get the score on cnet
+	    			score = assertion.score;
+	    			
+	    			//Figure out how many points to assign based on rarity
+	    			if (parseInt(score) >=  upperThresh) {
+	  		 			assignPoints(1);
+	  				} else if (parseInt(score) >= midThresh) {
+	  					assignPoints(2);
+	  				} else if (parseInt(score) >= lowThresh) {
+	  					assignPoints(3);
+	  				} else {
+	  					assignPoints(1);
+	  				}
+	    			
+	    			//Add the following link info to the display
+	    			str = concept1 + " " + relation + " " + concept2 + ": Score is " + score + " on ConceptNet" + "<br />";
+	    			addLink(str);
+	    			
+	    			//Draw the concept on the visual
+	  				draw(concept2);
+	  				
+	  				//Set the next left concept to the form right concept
+ 					$("#concept1").text(concept2);
+	  		
+
+					//TODO: Vote on the concept in ConceptNet
+	  			
+	  				//Update the points 
+	     			$("#pointsVal").text(points);
+	  		
+  				//If the Assertion IS NOT in ConceptNet		
+	    		} else {
+	    			//Assign points
+	    			assignPoints(5);
+	    			
+	    			//Add the following link info the display
+	     			str = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet" + "<br />";
+	     			addLink(str);
+	     			
+	     			//Draw the concept on the visual	
+	     			draw(concept2);
+	     				
+	     			//Set the next left concept to the form right concept
+	     			$("#concept1").text(concept2);
+	     			
+	     			//Update the points 
+	     			$("#pointsVal").text(points);
+	     			
+	     			//TODO: Vote on the concept in ConceptNet
+	   	 		}
+	   	 	}
+        		
+        },
+        error: function() {
+	    		//Assign points
+	    		assignPoints(5);
+	    			
+	    		//Add the following link info the display
+	     		str = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet" + "<br />";
+	     		addLink(str);
+	     			
+	     		//Draw the concept on the visual	
+	     		draw(concept2);
+	     				
+	     		//Set the next left concept to the form right concept
+	     		$("#concept1").text(concept2);
+	     			
+	     		//Update the points 
+	     		$("#pointsVal").text(points);
+	     			
+	     		//TODO: Vote on the concept in ConceptNet
+        }
+        
+        
+    });
+
+	
+	
+	
+	//Winning the game...the second concept equals the target concept
+  	if (concept2 == endConcept.toLowerCase()) {
+  		var str = "You found a connection! Thanks for your contribution.";
+		$("#linkButton").button( "option", "disabled", true );
+	
+	}
+	return false;
+	
+			
+}
 
 
 $(document).ready(function(){
-	var startConcept = '{{ concept1 }}';
-	var endConcept = '{{ concept2 }}';
-	var cnetRelations = new Array();
-        var cnetRelationsD = {};
 
-
-	//Gets Relations
-	{% for relationInfo in relationsList %}
-	//$("#relationsMenu").append("<option value='{{ relationInfo.0 }}'>" + '{{
-	//  relationInfo.1.1 }}' + "</option>");
-  		cnetRelations.push('{{ relationInfo.1.0 }}')
-	        cnetRelationsD['{{ relationInfo.1.0 }}'] = '{{ relationInfo.0 }}'
-	{% endfor %}
-
-
+	///////UI Related
+	
 	//jQuery UI
   	$('#linkButton').button();	
+  	$("#linkButton").click(linkSubmit) 
+  	
+  	
 	$('#getConceptsButton').button();
   	$("#relationsMenu").autocomplete({source: cnetRelations, delay: 0});
   	$("#relationsMenuB").button({icons: { primary: "ui-icon-triangle-1-s"}, text: false});
@@ -48,147 +203,35 @@ $(document).ready(function(){
   					return false; //So that the form does not submit
 					});
 
-  
+  	//Positions AutoComplete button
   	$("#relationsMenuB").position({ my: "left center", at: "right center", of: $("#relationsMenu"), offset: "-1 0"}).css("top", "").addClass("ui-corner-right ui-button-icon");
 	$("#relationsMenuB").height($("#relationsMenu").height());
   
   
+  
+  	
   	//Draws the first concept in the canvas
   	draw('{{ concept1 }}');
 
+}); 
 
 
 
-	$("#linkButton").click(function() {  
-		// validate form here
-		var concept1 = $("#concept1").text()
-  		var concept2 = $("input#concept2").val();
-  		var relation = $("input#relationsMenu").val();
-  
- 		if (concept1 == "") {
-		  //Do something if concept1 is blank
-		  //Maybe $("label#name_error").show();
-		}
-
-  		if (concept2 == "") {
-  			//Do something if concept2 is blank
-  		}
-
-  		if (concept2 == endConcept) {
-  			var str = "You found a connection! Thanks for your contribution.";
-			$("#linkButton").button( "option", "disabled", true )
-		} else {
-  			var str = concept1 + " " + relation + " " + concept2;
-  			$("#concept1").text(concept2)
-  		}
-
-
-
-		var rel = cnetRelationsD[relation];
-      $.ajax({
-           url:cnurl + '/assertionfind/' + rel + '/' + concept1 + '/' + concept2 + '/',
-           type: 'get',
-           async: true,
-           dataType: 'json',
-           success: function(data, status, x) {
-               if (data == '[]') {
-               		console.log("%s,%s,%s wasn't there", rel, concept1, concept2);
-              
-					return (null);
-				} else {               		
-               		var assertion = data[0];
-               		console.log(assertion);
-               		
-               		if (assertion != null) {
-	    				var score = assertion.score;
-	    				str = str + ": Score is " + score + " on ConceptNet" + "<br />";
-	    				addLink(str);
-	  					draw(concept2);
-	  		
-	  				if (parseInt(score) >=  upperThresh) {
-	  		 			assignPoints(1);
-	  				} else if (parseInt(score) >= midThresh) {
-	  					assignPoints(2);
-	  				} else if (parseInt(score) >= midThresh) {
-	  					assignPoints(3);
-	  				}
-	  			
-	  				assignPoints(1);
-	  		
-  						
-	    			} else {
-	     				str = str + ": Not found in ConceptNet" + "<br />";
-	     				addLink(str);
-	     				draw(concept2);
-	     				assignPoints(5);
-	     				$("#pointsVal").text(points);
-	     					
-	   	 			}
-	   	 			
-	   	 			
-	   	 			
-
-        		}
-        		
-        	},
-        	error: function() {
-	     		str = str + ": Not found in ConceptNet" + "<br />";
-	     		addLink(str);
-	     		draw(concept2);
-	     		assignPoints(5);
-	     		$("#pointsVal").text(points);
-        	}
-
-});
-
-		$("#pointsVal").text(points);
-	    
-  		return false;
-	}); 
-
-
-
-	function assignPoints(p) {
-  		points = points + p;
-  	}
-
-  	function getPointValue(score) {
-  		return 1;
-  	}
-
-  	function addLink(str) {
-    	$("#linkslist").append(str);
-    	usedLinks = usedLinks + 1;
-    	$("#linksVal").text(usedLinks);
-  	}
-
-
-});
-  
-  
-//Queries ConceptNet to see if link is there
-//Returns true if it is, false if it isn't
-function inCN(concept) {
-
-	$.ajax({
-		url: cnurl+'en/concept/'+concept+ '/',
-		type: 'get',
-		success: function(data, status, x) {
-                        console.log("It was there");
-			return true;
-		},
-		error: function() {
-                        console.log("It wasn't there");
-			return false;
-		}
-	});
-};
-
-function assertionExists(rel, concept1, concept2) {
-
-
-
+function assignPoints(p) {
+  	points = points + p;
 }
+
+function getPointValue(score) {
+  	return 1;
+}
+
+
+function addLink(str) {
+	$("#linkslist").append(str);
+    usedLinks = usedLinks + 1;
+    $("#linksVal").text(usedLinks);
+}
+
 
   
 

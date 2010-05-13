@@ -49,8 +49,7 @@ http://ietherpad.com/8htfRVipcr
 
 
 * Model 4
-** TODO Add some kind of user login facility
-** TODO But allow playing as guest
+** DONE Add some kind of user login facility
 ** TODO Add points to the user for playing game
 
 ** TODO Label arrows
@@ -72,6 +71,9 @@ http://ietherpad.com/8htfRVipcr
 ** TODO Refresh vs. retyping/resubmitting url
 ** TODO Process natural language text
 
+** TODO But allow playing as guest
+** TODO Form Validation for main concept form (submitting nothing should show error message)
+** TODO Display a "Play new game" button or something when the user wins
 *  ---------------------------------------------------------------------------
 Extra credit: HIgh Scores
 Say "you used 2 steps" blah blah did the same thing in like 200 steps
