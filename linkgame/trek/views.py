@@ -41,6 +41,16 @@ def update_points(request, p):
 
 
 @login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+        claimedLinks = ClaimedLink.objects.get(userid=user.id)
+        return render_to_response('profile.html', {'claimed': claimedLinks}, context_instance=RequestContext(request))
+    except:
+        raise Http404()
+    
+
+@login_required
 def claim_link(request):
     if request.method == 'GET':
         try:
