@@ -9,12 +9,13 @@ urlpatterns = patterns('',
                        (r'^$', login),
                        (r'^newgame/$', new_game),
                        (r'^accounts/login/$',  login),
-                       (r'^accounts/logout/$', logout),
+                       (r'^accounts/logout/$', logout),    
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
                         {'document_root': './trek/media'}),
                        (r'^newgame/addpoints/(?P<p>.*)$', update_points),
                        (r'^newgame/claim/$', claim_link),
-                       (r'^user/(?P<username>\w{1,50})/profile/$', profile),
+                      # (r'^user/(?P<username>\w{1,50})/profile/$', profile),
+                       (r'^user/(?P<username>.*)/$', profile),
           
 
     # Example:

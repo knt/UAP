@@ -6,8 +6,13 @@
 
 <h2 id="username">{{ user.username }}'s Profile</h2>
 
+<h3>Points: {{ user.get_profile.points }}</h3>
 
 
+<h3>Claimed Links</h3>
+{% for link in claimed %}
+    <p>{{ link.concept1 }} {{ link.relation }} {{ link.concept2 }}: used {{ link.used }} times </p>
+{% endfor %}
 
 
 </body>                                                                 

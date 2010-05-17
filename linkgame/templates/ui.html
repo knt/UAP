@@ -27,6 +27,7 @@
   <button id="relationsMenuB" type=""></button>
   <input type="text" name="concept2" id="concept2" class="conceptBox" required="true" />
   <button name="submitButton" id="linkButton" type="submit">Submit</button>
+  <img src="/trek/site_media/loader.gif" id="loading" alt="Searching ConceptNet">
   </form>
 </div>
 
@@ -123,6 +124,10 @@ function linkSubmit() {
 	var msg = "";
 	var score = 0;
 	
+	
+	
+	$("#loading").show();
+	$("#linkButton").button( "option", "disabled", true );
 	$.ajax({
 		url:cnurl + '/assertionfind/' + relCN + '/' + concept1 + '/' + concept2 + '/',
 		type: 'get',
@@ -192,17 +197,25 @@ function linkSubmit() {
 	     	//Draw the concept on the visual	
 	     	draw(concept2);
         
+        
+        	//TODO: Vote on the concept in ConceptNet
+        	$("#loading").hide()
+        	
+        	
+        	
 	        //Winning the game...the second concept equals the target concept
 		  	if (concept2 == endConcept.toLowerCase()) {
   				var str = "You found a connection! Thanks for your contribution.";
 				$("#linkButton").button( "option", "disabled", true );
 				userWins($("#pointsVal").text());
+			} else {
+			
+				$("#linkButton").button( "option", "disabled", false );
+			
 			}
         
         
-	        //TODO: Vote on the concept in ConceptNet
-        
-        
+	        
         }
         
         
@@ -254,7 +267,7 @@ $(document).ready(function(){
 	$("#relationsMenuB").height($("#relationsMenu").height());
   
   
-  
+  	$("#loading").hide();
   	
   	//Draws the first concept in the canvas
   	draw('{{ concept1 }}');

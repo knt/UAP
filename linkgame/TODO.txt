@@ -45,20 +45,23 @@ http://ietherpad.com/8htfRVipcr
 
 
 * Model 4.5
-** TODO Profile Page
-** TODO Clicking on "Claim Link" 
-** TODO "Loading" gif / disable submit button while searching CNET
+** DONE Profile Page
+** DONE Clicking on "Claim Link" 
+** DONE "Loading" gif / disable submit button while searching CNET
 ** TODO Instead of 10 handpicked concepts, get random concepts
 
 
 * Model 5
-** TODO Have DB where "new assertions by user" can be recorded
 ** TODO Make code check both conceptnet AND the claimed link database
+** TODO Claimed links dont display "win" message to user
+** TODO Claimed links that aren't a relation show up as undefined
+** TODO Claimed links should update when they are used by users
+** TODO Link to game from profile page, all pages
 
 * Model 6
 ** TODO Make it not look like crap part 1: add graphics and stuff
 ** TODO Fix alignment of input form
-** TODO Label arrows
+** TODO Label arrows    
 
 * Model 7
 ** TODO Figure out what needs to be changed and make new plan.
@@ -67,6 +70,7 @@ http://ietherpad.com/8htfRVipcr
 
 
 * TODO:
+** TODO Have option to "cancel" looking in conceptnet
 ** TODO can't add same concept twice: clown IsA clown
 ** TODO Refresh vs. retyping/resubmitting url
 ** TODO Process natural language text

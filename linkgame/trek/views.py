@@ -1,12 +1,12 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.conf import settings
 #from commonsense.queries import get_random_concepts
 from csc.conceptnet4.models import Concept, Relation, RawAssertion
 from django.contrib.auth.decorators import login_required
-from trek.models import ClaimedLink
-import random
-
+from trek.models import ClaimedLink, User
+import random, os
 
 
 
@@ -18,14 +18,15 @@ def new_game(request):
     profile = request.user.profile
     
     relations =  get_all_relations('en')
-    concept1, concept2 = get_random_concepts('en')
+    #concept1, concept2 = get_random_concepts('en')
+    concept1, concept2 = get_random_from_file()
     return render_to_response('ui.html', {'concept1': concept1, 'concept2': concept2, 'relationsList': relations, 'profile': profile}, context_instance=RequestContext(request))
 
 
 @login_required
 def update_points(request, p):
     if request.method == 'POST':
-        try: 
+        try:    
             p = int(p)
             print p
             print "Updating profile"
@@ -40,15 +41,19 @@ def update_points(request, p):
         raise Http404()
 
 
-@login_required
 def profile(request, username):
     try:
         user = User.objects.get(username=username)
-        claimedLinks = ClaimedLink.objects.get(userid=user.id)
-        return render_to_response('profile.html', {'claimed': claimedLinks}, context_instance=RequestContext(request))
+        profile = user.profile
+        claimedLinks = ClaimedLink.objects.filter(userid=user.id)
+    except ClaimedLink.DoesNotExist:
+        claimedLinks = []
     except:
         raise Http404()
-    
+
+    print "claimed", claimedLinks
+    return render_to_response('profile.html', {'claimed': claimedLinks, 'user': user}, context_instance=RequestContext(request))
+
 
 @login_required
 def claim_link(request):
@@ -124,7 +129,6 @@ def get_all_relations(lang):
     return relations
    #return get_relations_from_CN() #Gets the relations from the DB...warning, not at all are usable
 
- 
 def get_relations_from_CN():
     return [r.text for r in Relation.objects.all()]
 #print get_random_concepts('en')
@@ -132,11 +136,6 @@ def get_relations_from_CN():
 
 
 random_cs = ["panda", "pony", "coffee", "notebook", "computer", "pen", "clown", "giraffe", "elephant"]
-
-
-
-
-
 
 relations = [["IsA", ["is a", "What kind of thing is it?", 5]],
              ["CapableOf", ["capable of", "What can it do?", 8]],
@@ -163,4 +162,15 @@ relations = [["IsA", ["is a", "What kind of thing is it?", 5]],
              ["ConceptuallyRelatedTo", ["is conceptually related to", "What is related to it in an unknown way?", 12]]]
 
 
+random_concepts =open(os.path.join(settings.MEDIA_ROOT, 'random_concepts.txt'), 'rb').readlines()
 
+def get_random_from_file(num=2):
+
+    concepts = set([])
+
+    while len(concepts) < num:
+        concepts.add(random.choice(random_concepts).strip())
+        
+    print concepts
+    return list(concepts)
+    
