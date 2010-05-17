@@ -19,12 +19,11 @@
 <body>                                                                  
 
 <div class="title">
-<h1>LinkGame 0.1</h1>
+<h1>ConceptTrek 0.1</h1>
   </div>
 
 <div class="nav">
 <ul>
-
 {% if user.is_authenticated %}
 <li><a href="/accounts/logout/?next=/trek/newgame/">Logout</a></li>
 <li><a href='/trek/user/{{ user.username}}/'>Profile</a></li>
@@ -33,11 +32,12 @@
 {{ user.username }}
 </li>
 {% else %}
-
 <li><a href="/accounts/login/?next=/trek/newgame/">Log In</a></li>
 {% endif %}
 
+<li><a href="/trek/newgame/">Play</a></li>
 </ul>
 </div>
+
 
 

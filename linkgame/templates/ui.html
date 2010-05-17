@@ -1,6 +1,16 @@
 
 {% include 'base.html' %}
 
+
+<div id="start">
+  Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
+  {{ concept2 }} </span>.
+</div>
+
+<div id="nodebox" class="visual" width="500" min-height="400">
+
+</div>
+
 <div id="visuals" class="visual">
   <canvas id="canvas" width="500" min-height="400">Visualizes your path in the game.</canvas>
 </div>
@@ -8,10 +18,7 @@
 
 
 <div id="userControls">
-<div class="text">
-  Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
-  {{ concept2 }} </span>.
-</div>
+
 
 <div id="linkslist">
 
@@ -112,12 +119,11 @@ function linkSubmit() {
 
 	//Get the CNet form of the relation, if its an official CNet relation
 	var relCN = "";
-	relCN = cnetRelationsD[relation];
-//	if (cnetRelationsD.hasKey(relation)) {
-//		rel = cnetRelationsD[relation];
-//	} else {
-//		rel = relation;
-//	}
+	if (relation in cnetRelationsD) {
+		relCN = cnetRelationsD[relation];
+	} else {
+		relCN = relation;
+	}
 	
 	
 	
@@ -231,7 +237,6 @@ function linkSubmit() {
         			},
         			complete: function() {
         			
-        				console.log(claimed);
         				if (claimed == true) {
         		
         					msg = concept1 + " " + relation + " " + concept2 + ": link created by " + user;
@@ -266,7 +271,8 @@ function linkSubmit() {
 	    		
 			    		//Winning the game...the second concept equals the target concept
 					  	if (concept2 == endConcept.toLowerCase()) {
-  							var str = "You found a connection! Thanks for your contribution.";
+  							var win = "You found a connection! Thanks for your contribution.";
+  							addMsg(win)
 							$("#linkButton").button( "option", "disabled", true );
 							userWins($("#pointsVal").text());
 						} else {
@@ -336,6 +342,8 @@ $(document).ready(function(){
   	
   	//Draws the first concept in the canvas
   	draw('{{ concept1 }}');
+  	$("#canvas").hide();
+  	draw_exp('{{ concept1 }}');
 
 }); 
 
@@ -350,12 +358,22 @@ function getPointValue(score) {
 }
 
 
-function addLink(str) {
-	$("#linkslist").append(str);
+function addLink(s) {
+	addMsg(s);
     usedLinks = usedLinks + 1;
     $("#linksVal").text(usedLinks);
 }
 
+function addMsg(s) {
+	$("#linkslist").append(s);
+}
+
+function draw_exp(s) {
+	
+	$("#nodebox").append("<span id='c0' class='cnode'>"+s+"</span>");
+	$("#c0").show("drop");
+
+}
 
   
 

@@ -49,26 +49,36 @@ http://ietherpad.com/8htfRVipcr
 ** DONE "Loading" gif / disable submit button while searching CNET
 ** DONE Instead of 10 handpicked concepts, get random concepts
 
+* DONE Model 5
+** DONE Make code check both conceptnet AND the claimed link database
+** DONE Claimed links dont display "win" message to user
+** DONE Give points to and update used count for used link
+** DONE Claimed links that aren't a relation show up as undefined
+** DONE Claimed links should update when they are used by users
+** DONE Link to game from profile page, all pages
 
-* Model 5
-** TODO Make code check both conceptnet AND the claimed link database
-** TODO Claimed links dont display "win" message to user
-** TODO Claimed links that aren't a relation show up as undefined
-** TODO Claimed links should update when they are used by users
-** TODO Link to game from profile page, all pages
 
-* Model 6
+
+* Model 6: Visuals
+** DONE Put "Try to find"... above box
+** TODO Change wording of "Get new concepts"
+** TODO Put links, points in more prominent location
+** TODO "New Game" or "Play button"
+** TODO Front page, top users
+   
+
+* Model 7
 ** TODO Make it not look like crap part 1: add graphics and stuff
 ** TODO Fix alignment of input form
 ** TODO Label arrows    
+** TODO Start Over button
 
-* Model 7
+* Model 8
 ** TODO Figure out what needs to be changed and make new plan.
 
-
-
-
 * TODO:
+** TODO Don't allow users to get points for using their own links
+** TODO Figure out better message to display
 ** TODO Have option to "cancel" looking in conceptnet
 ** TODO can't add same concept twice: clown IsA clown
 ** TODO Refresh vs. retyping/resubmitting url
@@ -77,6 +87,7 @@ http://ietherpad.com/8htfRVipcr
 ** TODO But allow playing as guest
 ** TODO Form Validation for main concept form (submitting nothing should show error message)
 ** TODO Display a "Play new game" button or something when the user wins
+** TODO Actually add things to concep
 *  ---------------------------------------------------------------------------
 Extra credit: HIgh Scores
 Say "you used 2 steps" blah blah did the same thing in like 200 steps

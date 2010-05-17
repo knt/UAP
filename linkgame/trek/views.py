@@ -77,7 +77,7 @@ def claim_link(request):
         print "made it this far"
         
         if not(claimed):
-            claimed = ClaimedLink(concept1=c1, concept2=c2, relation=rel, userid=request.user)
+            claimed = ClaimedLink(concept1=c1, concept2=c2, relation=rel, userid=request.user, used=1)
             claimed.save()
             return HttpResponse()
         else:
@@ -92,8 +92,17 @@ def link_is_claimed(request):
             c2 = request.GET.get('c2')
             rel = request.GET.get('relation')
             use = bool(request.GET.get('use'))
-            
+
             claimed = ClaimedLink.objects.get(concept1=c1, concept2=c2, relation=rel)
+
+            if use:
+                claimed.used += 1
+                claimed.save()
+                user = claimed.userid
+                profile = user.profile
+                profile.points += 1
+                profile.save()
+
             return HttpResponse(claimed.userid)
         except:
             raise Http404()
