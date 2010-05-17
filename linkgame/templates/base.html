@@ -28,7 +28,7 @@
 {% if user.is_authenticated %}
 <li><a href="/accounts/logout/?next=/trek/newgame/">Logout</a></li>
 <li><a href='/trek/user/{{ user.username}}/'>Profile</a></li>
-<li>Points: {{ user.get_profile.points }}</li>
+<li> Points: {{ user.get_profile.points }} </li>
 <li>
 {{ user.username }}
 </li>

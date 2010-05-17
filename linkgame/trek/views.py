@@ -18,8 +18,8 @@ def new_game(request):
     profile = request.user.profile
     
     relations =  get_all_relations('en')
-    #concept1, concept2 = get_random_concepts('en')
-    concept1, concept2 = get_random_from_file()
+    concept1, concept2 = get_random_concepts('en')
+    #concept1, concept2 = get_random_from_file()
     return render_to_response('ui.html', {'concept1': concept1, 'concept2': concept2, 'relationsList': relations, 'profile': profile}, context_instance=RequestContext(request))
 
 
@@ -83,7 +83,23 @@ def claim_link(request):
         else:
             return HttpResponse("Already Claimed")
 
-
+@login_required
+def link_is_claimed(request):
+    if request.method == 'GET':
+        try:
+            print "Searching for link"
+            c1 = request.GET.get('c1')
+            c2 = request.GET.get('c2')
+            rel = request.GET.get('relation')
+            use = bool(request.GET.get('use'))
+            
+            claimed = ClaimedLink.objects.get(concept1=c1, concept2=c2, relation=rel)
+            return HttpResponse(claimed.userid)
+        except:
+            raise Http404()
+        
+        
+    
         
     
 #concepts = get_random_concepts(language, 10)

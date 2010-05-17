@@ -19,7 +19,6 @@ function userWins(p) {
 
 
 function claim(concept1, relation, concept2) {
-	console.log("IM IN THIS FUNCTION");
 	$.ajax({
 		url:'claim/' + '?c1=' + concept1 + '&c2=' + concept2 + '&relation=' + relation,
 		type: 'get',

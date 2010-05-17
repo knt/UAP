@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
-from trek.views import new_game, update_points, claim_link, profile
+from trek.views import new_game, update_points, claim_link, profile, link_is_claimed
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        (r'^newgame/claim/$', claim_link),
                       # (r'^user/(?P<username>\w{1,50})/profile/$', profile),
                        (r'^user/(?P<username>.*)/$', profile),
+                       (r'^newgame/claimed/$', link_is_claimed),
           
 
     # Example:

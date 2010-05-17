@@ -43,12 +43,11 @@ http://ietherpad.com/8htfRVipcr
 ** DONE Add points to the user for playing game
 ** DONE Allow users to "claim" links
 
-
-* Model 4.5
+* DONE Model 4.5
 ** DONE Profile Page
 ** DONE Clicking on "Claim Link" 
 ** DONE "Loading" gif / disable submit button while searching CNET
-** TODO Instead of 10 handpicked concepts, get random concepts
+** DONE Instead of 10 handpicked concepts, get random concepts
 
 
 * Model 5
