@@ -3,26 +3,22 @@
 
 
 <div id="start">
+	<span>
   Try to find a connection between <span class="concept"> {{ concept1 }} </span> and <span class="concept">
   {{ concept2 }} </span>.
+  	</span>
+  <button action="" method="" name="getConceptsButton" id="getConceptsButton" type="submit">Get New Concepts</button>
 </div>
 
-<div id="nodebox" class="visual" width="500" min-height="400">
 
-</div>
 
-<div id="visuals" class="visual">
-  <canvas id="canvas" width="500" min-height="400">Visualizes your path in the game.</canvas>
-</div>
+<div id="nodebox" class="visual"></div>
+
 
 
 
 <div id="userControls">
 
-
-<div id="linkslist">
-
-</div>
 
 <div class="form">
   <form name="linkForm" id="linkForm" action="" method="" >
@@ -38,17 +34,32 @@
   </form>
 </div>
 
-<button action="" method="" name="getConceptsButton"
-id="getConceptsButton" type="submit">Get New Concepts</button>
+
 <br />
-<span class="text" name="numLinks" id="numLinks">You used <span
-id="linksVal">0</span> links</span> <br />
-<span class="text" name="points" id="points">You have <span
-id="pointsVal">0</span> points. </span>
+
+
+
+
+
+
+<div id="pointsBox">
+
+<span class="text" name="numLinks" id="numLinks">Links Used: 
+	<span id="linksVal">0</span>
+</span>
+
+<span class="text" name="points" id="points">Score: 
+	<span id="pointsVal">0</span> 
+</span>
 
 </div>
 
-<div id='chart_div'></div>
+<div id="linkslist">
+
+</div>
+
+</div>
+
 
   
 </body>                                                                 
@@ -129,7 +140,7 @@ function linkSubmit() {
 	
 	msg = "";
 	var score = 0;
-	var points = 0;
+	var newpoints = 0;
 	var inCnet = false;
 	
 	$("#loading").show();
@@ -155,13 +166,13 @@ function linkSubmit() {
 	    			
 	    			//Figure out how many points to assign based on rarity
 	    			if (parseInt(score) >=  upperThresh) {
-	  		 			points = 1;
+	  		 			newpoints = 1;
 	  				} else if (parseInt(score) >= midThresh) {
-	  					points = 2;
+	  					newpoints = 2;
 	  				} else if (parseInt(score) >= lowThresh) {
-	  					points = 3;
+	  					newpoints = 3;
 	  				} else {
-	  					points = 1;
+	  					newpoints = 1;
 	  				}
 	    			
 	    			inCnet = true;
@@ -169,7 +180,7 @@ function linkSubmit() {
   				//If the Assertion IS NOT in ConceptNet		
 	    		} else {
 	    			//Assign points
-	    			points = 5;
+	    			newpoints = 5;
 	    			inCnet = false;
 	    			
 	   	 		}
@@ -178,7 +189,7 @@ function linkSubmit() {
         },
         error: function() {
 	    		//Assign points
-	    		points = 5;
+	    		newpoints = 5;
 	    		inCnet = false;
 	     		
 	     		
@@ -199,13 +210,12 @@ function linkSubmit() {
         		
         		//Add the following link info to the display
 	    		addLink(msg);
-    	    	
+	    		
     	    	//Update the points 
-    	    	assignPoints(points)
+    	    	assignPoints(newpoints)
 	    		$("#pointsVal").text(points);
 	    		
-	    		//Draw the concept on the visual	
-	     		draw(concept2);
+	    		
 	    		
 	    		$("#loading").hide()
 	    		
@@ -214,8 +224,11 @@ function linkSubmit() {
   					var str = "You found a connection! Thanks for your contribution.";
 					$("#linkButton").button( "option", "disabled", true );
 					userWins($("#pointsVal").text());
+					
+					drawEnd(concept2, usedLinks);
 				} else {
-			
+					//Draw the concept on the visual	
+	     			draw(concept2, usedLinks);
 					$("#linkButton").button( "option", "disabled", false );
 			
 				}
@@ -228,11 +241,12 @@ function linkSubmit() {
 					type: 'get',
         			async: true,
         			success: function(data, status, x) {
-        				points = 1
+        				newpoints = 1
         				claimed = true;
         				user = data;
         			},
         			error: function() {	
+        				newpoints = 3;
         				claimed = false;
         			},
         			complete: function() {
@@ -244,7 +258,7 @@ function linkSubmit() {
 		        		} else {
         			
         					msg = concept1 + " " + relation + " " + concept2 + ": Not found in ConceptNet";
-	     					msg = msg + "<span class='claim'> <a href='#null' onClick=\"claim('" + concept1 + "','" + relCN + "','" + concept2 + "');\">" + "Claim Link" + "</a></span>";
+	     					msg = msg + "<span class='claim' id='claim" + usedLinks + "'> <a href='#null' onClick=\"claimLink('" + concept1 + "','" + relCN + "','" + concept2 + "','" + usedLinks + "');\">" + "Claim Link" + "</a></span>";
         		
         				}
         				
@@ -261,22 +275,21 @@ function linkSubmit() {
 	    				addLink(msg);
     	    	
     	    			//Update the points 
-		    	    	assignPoints(points)
+		    	    	assignPoints(newpoints)
 	    				$("#pointsVal").text(points);
-	    		
-			    		//Draw the concept on the visual	
-	    		 		draw(concept2);
 	    		
 	    				$("#loading").hide()
 	    		
 			    		//Winning the game...the second concept equals the target concept
 					  	if (concept2 == endConcept.toLowerCase()) {
-  							var win = "You found a connection! Thanks for your contribution.";
+  							var win = "You found a connection! Thanks for your contribution.<br />";
   							addMsg(win)
 							$("#linkButton").button( "option", "disabled", true );
 							userWins($("#pointsVal").text());
+							drawEnd(concept2, usedLinks);
 						} else {
-			
+						//Draw the concept on the visual	
+	     					draw(concept2, usedLinks);
 							$("#linkButton").button( "option", "disabled", false );
 			
 						}
@@ -303,7 +316,14 @@ function linkSubmit() {
 
 
 
+function claimLink(concept1, relation, concept2, l) {
+	claim(concept1, relation, concept2);
 
+			$("#claim"+l).text("Claimed");
+		
+	return false;
+
+}
 
 
 
@@ -321,6 +341,9 @@ $(document).ready(function(){
   	$("#relationsMenu").autocomplete({source: cnetRelations, delay: 0});
   	$("#relationsMenuB").button({icons: { primary: "ui-icon-triangle-1-s"}, text: false});
 
+
+	$("#getConceptsButton").click(function() { location.reload();});
+	
 	//Sets up AutoComplete button
   	$("#relationsMenuB").click(function() {
   					// close if already visible
@@ -341,9 +364,8 @@ $(document).ready(function(){
   	$("#loading").hide();
   	
   	//Draws the first concept in the canvas
-  	draw('{{ concept1 }}');
+  	draw('{{ concept1 }}', usedLinks);
   	$("#canvas").hide();
-  	draw_exp('{{ concept1 }}');
 
 }); 
 
@@ -365,78 +387,25 @@ function addLink(s) {
 }
 
 function addMsg(s) {
-	$("#linkslist").append(s);
+	$("#linkslist").prepend(s);
 }
 
-function draw_exp(s) {
+function draw(s, n) {
+	$("#nodebox").append("<span id='c"+n+"' class='cnode'>"+s+"</span>");
+	draw_arrow(n);
 	
-	$("#nodebox").append("<span id='c0' class='cnode'>"+s+"</span>");
-	$("#c0").show("drop");
-
 }
 
+function drawEnd(s, n) {
+	$("#nodebox").append("<span id='c"+n+"' class='winnode'>"+s+"</span>");
+}
+
+
+
+function draw_arrow(n){
+	$("#nodebox").append("<img id='r" + n + "' class='rnode'src='/trek/site_media/arrow.png' alt='relation'>");
+}
   
 
 </script>
 
-  <script type="text/javascript">
-
-  var lastx = (500 / 2);
-  var lasty = 2.5;
-  var drawArrow = false;
-  
-  function draw(str){
-  var canvas = document.getElementById("canvas");
-  var paddingW = 20;
-  var paddingH = 20;
-  var cvWidth = $("#canvas").width();
-
-  if (canvas.getContext){  
-  var ctx = canvas.getContext("2d");
-  ctx.textAlign = "center";
-  ctx.lineWidth = 1.0;
-  ctx.textBaseline = "middle";
-  ctx.font = "1em sans-serif";
-  ctx.lineJoin = "round";
-  //ctx.fillText('{{ concept1 }}', 60, 60);
-  // ctx.beginPath();  
-  // ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle  
-  // ctx.stroke();   
-
-
-  var metrics = ctx.measureText(str);
-  var nodeWidth = metrics.width + paddingW;
-  var nodeHeight = 30;
-
-  if (drawArrow == true) {
-
-  var arrowLength = lasty + 30;
-
-  ctx.beginPath();
-  ctx.moveTo(lastx, lasty);
-  ctx.lineTo(lastx, arrowLength);
-  ctx.lineTo(lastx + 5, arrowLength - 5);
-  ctx.moveTo(lastx - 5, arrowLength - 5);
-  ctx.lineTo(lastx, arrowLength);
-  ctx.stroke();
-  ctx.closePath();
-
-  lasty = arrowLength + 6;
-
-}
-
-  draw_node(ctx, lastx-(nodeWidth/2), lasty, nodeWidth, nodeHeight);
-  ctx.fillText(str, lastx+(nodeWidth/2)-(nodeWidth/2), lasty+(nodeHeight/2));
-  lastx = lastx;
-  lasty = lasty + nodeHeight;
-
-drawArrow = true;
-  } else {  
-  // canvas-unsupported code here  
-  }  }
-
-
-  function draw_node(context, x, y, width, height) {
-  context.strokeRect(x, y, width,  height );
-  };
-  </script>

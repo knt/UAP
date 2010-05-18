@@ -58,21 +58,27 @@ http://ietherpad.com/8htfRVipcr
 ** DONE Link to game from profile page, all pages
 
 
-
-* Model 6: Visuals
+* DONE Model 6: Visuals
 ** DONE Put "Try to find"... above box
-** TODO Change wording of "Get new concepts"
-** TODO Put links, points in more prominent location
-** TODO "New Game" or "Play button"
-** TODO Front page, top users
+** DONE Change wording of "Get new concepts"
+** DONE Put links, points in more prominent location
+** DONE "New Game" or "Play button"
+** DONE Front page, top users
+
+
+* Model 7: 
+** TODO Error messages
+** TODO Fix weird dropdown button
+** TODO Fix weird dropdown glitch
+** TODO Make arrow only pop up after the relation is asserted
    
 
-* Model 7
+* Model 7.5
 ** TODO Make it not look like crap part 1: add graphics and stuff
 ** TODO Fix alignment of input form
 ** TODO Label arrows    
 ** TODO Start Over button
-
+   
 * Model 8
 ** TODO Figure out what needs to be changed and make new plan.
 
@@ -113,3 +119,9 @@ Make it not look like crap: random art from wikipedia
 
 RawAssertion
 2. 
+
+
+computer has a mouse
+Mouse is an animal
+animal located in zoo
+zoo has a panda

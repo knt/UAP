@@ -28,11 +28,11 @@ function claim(concept1, relation, concept2) {
 		},
         error: function() {
         	console.log("Bad");
+        },
         
-        }
         
     });
     
-    return false;
-
+    
+	return false;
 }

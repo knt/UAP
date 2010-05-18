@@ -25,17 +25,18 @@
 <div class="nav">
 <ul>
 {% if user.is_authenticated %}
-<li><a href="/accounts/logout/?next=/trek/newgame/">Logout</a></li>
-<li><a href='/trek/user/{{ user.username}}/'>Profile</a></li>
-<li> Points: {{ user.get_profile.points }} </li>
-<li>
-{{ user.username }}
+<li class="rightI"><a href="/accounts/logout/?next=/trek/newgame/" class="menu">Logout</a></li>
+<li class="rightI"><a href='/trek/user/{{ user.username}}/' class="menu">Profile</a></li>
+<li class="rightI"><span id="navtext">Points: {{ user.get_profile.points }}</span></li>
+<li class="rightI">
+<span id="navtext">{{ user.username }}</span>
 </li>
 {% else %}
-<li><a href="/accounts/login/?next=/trek/newgame/">Log In</a></li>
+<li class="rightI"><a href="/accounts/login/?next=/trek/newgame/" class="menu">Log In</a></li>
 {% endif %}
 
-<li><a href="/trek/newgame/">Play</a></li>
+<li class="leftI"><a href="/trek/" class="menu">Home</a></li>
+<li class="leftI"><a href="/trek/newgame/" class="menu">Play</a></li>
 </ul>
 </div>
 

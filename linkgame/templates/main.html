@@ -1,0 +1,28 @@
+{% include 'base.html' %}
+
+
+<div>
+
+<div class="content">
+
+	<p><span class="highlight">ConceptTrek</span> is a game about finding connections between everyday objects and concepts.</p>
+	
+	<p>ConceptTrek is a part the <a href="http://openmind.media.mit.edu/">Open Mind Common Sense</a> project</p>
+
+	<h3>Get Started</h3>
+	
+	<h3>How to Play</h3>
+
+
+</div>
+
+
+<div class="info">
+	<h3>Top Users</h3>
+	
+	{% for u in topusers %}
+		<span id="user"><a href='/trek/user/{{user.username}}/' class="infoL">{{ u.user}}</a</span> <span id="points">{{ u.points }}</span><br />
+	{% endfor %}
+</div>
+
+</div>

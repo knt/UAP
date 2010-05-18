@@ -5,16 +5,22 @@ from django.conf import settings
 #from commonsense.queries import get_random_concepts
 from csc.conceptnet4.models import Concept, Relation, RawAssertion
 from django.contrib.auth.decorators import login_required
-from trek.models import ClaimedLink, User
+from trek.models import ClaimedLink, User, GameProfile
 import random, os
 
 
 
+def main(request):
+    try:
+        topUsers = GameProfile.objects.filter(points__gt=0).order_by('-points')[:5]
+    except:
+        topUsers = []
+        
+    print topUsers
+    return render_to_response('main.html', {'topusers': topUsers}, context_instance=RequestContext(request))
 
 @login_required
 def new_game(request):
-    print "Getting concepts"
-
     profile = request.user.profile
     
     relations =  get_all_relations('en')
