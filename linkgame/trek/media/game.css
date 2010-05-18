@@ -146,7 +146,7 @@ body {font-size: 1em; margin-right: 0px; margin-left: 0px; background-color:#fff
 .rightE { }
 
 #getConceptsButton { float: right; vertical-align: bottom;}
-#pointsBox { padding: 5px; text-align: center; margin-right: auto; margin-left: auto; background-color: #5D8996; }
+#pointsBox { padding: 5px; text-align: center; margin-right: auto; margin-left: auto; background-color: #5c8996; }
 #numLinks, #points { color: white; padding-right: 5px; padding-left: 5px; }
 #linksVal, #pointsVal { color: black; }
 .content { float: left; width: 70%; padding: 5px; margin: 5px; }
